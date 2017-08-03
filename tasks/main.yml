@@ -1,0 +1,49 @@
+---
+
+- name: download prometheus logstash exporter binary
+  get_url:
+    url: "{{ prometheus_logstash_exporter_release_base_url }}/{{ prometheus_logstash_exporter_release_version }}/{{ prometheus_logstash_exporter_release_name }}.tar.gz"
+    dest: "{{ prometheus_exporters_common_dist_dir }}"
+
+- name: delete old exporter binary file
+  file:
+    path: "{{ prometheus_exporters_common_dist_dir }}/logstash_exporter"
+    state: absent
+
+- name: unarchive binary tarball
+  unarchive:
+    copy: no
+    src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_logstash_exporter_release_name }}.tar.gz"
+    dest: "{{ prometheus_exporters_common_dist_dir }}/"
+    creates: "{{ prometheus_exporters_common_dist_dir }}/logstash_exporter"
+  register: prometheus_logstash_exporter_updated
+  notify:
+    - restart logstash exporter
+
+- name: create systemd service unit
+  template:
+    src: etc/systemd/system/prometheus-logstash-exporter.service.j2
+    dest: /etc/systemd/system/prometheus-logstash-exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'systemd'
+  notify:
+    - service reenable
+    - restart logstash exporter
+
+- name: create init service unit
+  template:
+    src: etc/init/prometheus-logstash-exporter.conf.j2
+    dest: /etc/init/prometheus-logstash-exporter.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'upstart'
+  notify:
+    - restart logstash exporter
+
+- name: ensure prometheus logstash exporter service is enabled
+  service:
+    name: prometheus-logstash-exporter
+    enabled: yes

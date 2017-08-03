@@ -1,0 +1,9 @@
+---
+
+- name: service reenable
+  command: systemctl reenable prometheus-logstash-exporter.service
+
+- name: restart logstash exporter
+  service:
+    name: prometheus-logstash-exporter
+    state: restarted

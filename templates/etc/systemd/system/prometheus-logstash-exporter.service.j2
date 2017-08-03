@@ -1,0 +1,15 @@
+[Unit]
+Description=Prometheus Logstash Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group={{ prometheus_exporters_group }}
+ExecStart={{ prometheus_exporters_common_dist_dir }}/logstash_exporter {{ prometheus_logstash_exporter_flags }}
+
+SyslogIdentifier=prometheus_logstash_exporter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -7,7 +7,7 @@ prometheus_exporters_root_dir: /opt/prometheus/exporters
 prometheus_exporters_log_dir: /var/log/prometheus
 
 prometheus_logstash_exporter_release_version: v0.1
-prometheus_logstash_exporter_release_base_url: "https://github.com/homelessnessbo/logstash_exporter/releases/download"
+prometheus_logstash_exporter_release_base_url: "https://github.com/2gis/logstash_exporter/releases/download"
 prometheus_logstash_exporter_file_name: "logstash_exporter_amd64.tar.gz"
 
 prometheus_logstash_exporter_flags: ""

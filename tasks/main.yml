@@ -2,7 +2,7 @@
 
 - name: download prometheus logstash exporter binary
   get_url:
-    url: "{{ prometheus_logstash_exporter_release_base_url }}/{{ prometheus_logstash_exporter_release_version }}/{{ prometheus_logstash_exporter_release_name }}.tar.gz"
+    url: "{{ prometheus_logstash_exporter_release_base_url }}/{{ prometheus_logstash_exporter_release_version }}/{{ prometheus_logstash_exporter_file_name }}"
     dest: "{{ prometheus_exporters_common_dist_dir }}"
 
 - name: delete old exporter binary file
@@ -13,7 +13,7 @@
 - name: unarchive binary tarball
   unarchive:
     copy: no
-    src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_logstash_exporter_release_name }}.tar.gz"
+    src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_logstash_exporter_file_name }}"
     dest: "{{ prometheus_exporters_common_dist_dir }}/"
     creates: "{{ prometheus_exporters_common_dist_dir }}/logstash_exporter"
   register: prometheus_logstash_exporter_updated
